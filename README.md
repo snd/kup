@@ -2,6 +2,10 @@
 
 simple html5 builder
 
+## install
+
+    npm install https://github.com/snd/up.git
+
 ## example usage
 
 ```coffeescript
