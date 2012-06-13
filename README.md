@@ -6,7 +6,7 @@ simple html5 builder
 
     npm install https://github.com/snd/up.git
 
-## example usage
+## use
 
 ```coffeescript
 Up = require 'up'
