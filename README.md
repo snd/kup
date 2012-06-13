@@ -1,12 +1,12 @@
-# up
+# Up
 
 simple html builder
 
-### install
+### Install
 
     npm install https://github.com/snd/up.git
 
-### use
+### Use
 
 ```coffeescript
 Up = require 'up'
@@ -84,9 +84,9 @@ After the break
 </html>
 ```
 
-### credit
+### Credit
 
-up is inspired by [mark hahn's](https://github.com/mark-hahn) [drykup](https://github.com/mark-hahn/drykup)
+Up is inspired by [mark hahn's](https://github.com/mark-hahn) [drykup](https://github.com/mark-hahn/drykup)
 
 #### differences to drykup
 
@@ -96,6 +96,6 @@ up is inspired by [mark hahn's](https://github.com/mark-hahn) [drykup](https://g
 - no indentation of the generated code
 - only html5 doctype
 
-### license
+### License
 
-up is released under the MIT License (see LICENSE for details).
+Up is released under the MIT License (see LICENSE for details).
