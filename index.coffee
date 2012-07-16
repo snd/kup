@@ -1,14 +1,18 @@
+contentEncodings =
+    '&': '&amp;'
+    '<': '&lt;'
+    '>': '&gt;'
+    '"': '&quot;'
+    '\'': '&#x27;'
+    '/': '&#x2F;'
+
+contentRegex = /[&<>"'\/]/g
+contentEncoder = (char) -> contentEncodings[char]
+encodeContent = (s) -> s.toString().replace contentRegex, contentEncoder
+
 module.exports = kup = class
 
-    constructor: (@options) -> @htmlOut = ''
-
-    _sanitizeAttribute: (string) ->
-        return string if (typeof @options?.sanitizeAttribute) isnt 'function'
-        @options.sanitizeAttribute string
-
-    _sanitizeContent: (string) ->
-        return string if (typeof @options?.sanitizeContent) isnt 'function'
-        @options.sanitizeContent string
+    constructor: -> @htmlOut = ''
 
     doctype: -> @htmlOut += '<!DOCTYPE html>\n'
 
@@ -17,20 +21,26 @@ module.exports = kup = class
             content = attrs
             attrs = null
 
-        @htmlOut += @open(name, attrs) + '>\n'
-        @htmlOut += (@_sanitizeContent content) + '\n' if (typeof content) is 'string'
-        content?()
+        @htmlOut += @open(name, attrs) + '>'
+        switch typeof content
+            when 'string'
+                @htmlOut += encodeContent content
+            when 'function'
+                @htmlOut += '\n'
+                content?()
         @htmlOut += "</#{name}>\n"
 
     open: (name, attrs) ->
         out = "<#{name}"
         for k, v of attrs
-            out += " #{k}=\"#{@_sanitizeAttribute v}\""
+            # XSS prevention for attributes:
+            # properly quoted attributes can only be escaped with the corresponding quote
+            out += " #{k}=\"#{v.toString().replace /"/g, '&quot;'}\""
         out
 
     empty: (name, attrs) -> @htmlOut += @open(name, attrs) + ' />\n'
 
-    text: (string) -> @htmlOut += string + '\n'
+    unsafe: (string) -> @htmlOut += string
 
 regular = 'a abbr address article aside audio b bdi bdo blockquote body button
     canvas caption cite code colgroup datalist dd del details dfn div dl dt em
