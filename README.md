@@ -91,7 +91,7 @@ After the break
 
 ### XSS Prevention
 
-[XSS Prevention Cheat Sheet](https://www.owasp.org/index.php/XSS_(Cross_Site_Scripting)_Prevention_Cheat_Sheet)
+[XSS Prevention Cheat Sheet](https://www.owasp.org/index.php/XSS_%28Cross_Site_Scripting%29_Prevention_Cheat_Sheet)
 
 [HTML Escaping](http://wonko.com/post/html-escaping)
 
