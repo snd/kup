@@ -93,9 +93,10 @@ Kup is a rewrite of [mark hahn's](https://github.com/mark-hahn) [drykup](https:/
 #### Differences to drykup
 
 - well tested
-- only 43 loc (vs. drykup's 237 loc)
+- much smaller codebase
 - twice as fast
 - no indentation of the generated code
+- hooks for xss prevention
 - only html5 doctype
 
 ### License: MIT
