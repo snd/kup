@@ -13,7 +13,7 @@ this coffeescript program:
 ```coffeescript
 Kup = require 'kup'
 
-kup = new Up
+kup = new Kup
 
 kup.doctype()
 
