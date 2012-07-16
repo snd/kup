@@ -1,43 +1,45 @@
-# Up
+# Kup
 
-simple html builder
+generate html from pure coffeescript
 
 ### Install
 
-    npm install https://github.com/snd/up.git
+    npm install kup
 
 ### Use
 
+this coffeescript program:
+
 ```coffeescript
-Up = require 'up'
+Kup = require 'kup'
 
-up = new Up
+kup = new Up
 
-up.doctype()
+kup.doctype()
 
-up.html ->
-    up.head ->
-        up.title 'a title'
-        up.script {
+kup.html ->
+    kup.head ->
+        kup.title 'a title'
+        kup.script {
             src: 'http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'
             type: 'text/javascript'
         }
-    up.body ->
-        up.div {id: 'container'}, ->
-            up.h1 'a heading'
-            up.h2 {class: 'secondary-heading'}, 'another heading'
-            up.ul ->
+    kup.body ->
+        kup.div {id: 'container'}, ->
+            kup.h1 'a heading'
+            kup.h2 {class: 'secondary-heading'}, 'another heading'
+            kup.ul ->
                 'first second third'.split(' ').forEach (x) ->
-                    up.li -> up.a x
-            up.p ->
-                up.addText 'Before the break'
-                up.br()
-                up.addText 'After the break'
+                    kup.li -> kup.a x
+            kup.p ->
+                kup.addText 'Before the break'
+                kup.br()
+                kup.addText 'After the break'
 
-console.log up.htmlOut
+console.log kup.htmlOut
 ```
 
-...will print this html:
+will generate this html:
 
 ```html
 <!DOCTYPE html>
@@ -86,9 +88,9 @@ After the break
 
 ### Credit
 
-Up is inspired by [mark hahn's](https://github.com/mark-hahn) [drykup](https://github.com/mark-hahn/drykup)
+Kup is a rewrite of [mark hahn's](https://github.com/mark-hahn) [drykup](https://github.com/mark-hahn/drykup)
 
-#### differences to drykup
+#### Differences to drykup
 
 - well tested
 - only 43 loc (vs. drykup's 237 loc)
@@ -96,6 +98,4 @@ Up is inspired by [mark hahn's](https://github.com/mark-hahn) [drykup](https://g
 - no indentation of the generated code
 - only html5 doctype
 
-### License
-
-Up is released under the MIT License (see LICENSE for details).
+### License: MIT
