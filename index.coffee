@@ -30,7 +30,7 @@ module.exports = kup = class
 
     empty: (name, attrs) -> @htmlOut += @open(name, attrs) + ' />\n'
 
-    addText: (string) -> @htmlOut += string + '\n'
+    text: (string) -> @htmlOut += string + '\n'
 
 regular = 'a abbr address article aside audio b bdi bdo blockquote body button
     canvas caption cite code colgroup datalist dd del details dfn div dl dt em

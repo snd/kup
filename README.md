@@ -35,9 +35,9 @@ kup.html ->
                 'first second third'.split(' ').forEach (x) ->
                     kup.li -> kup.a x
             kup.p ->
-                kup.addText 'Before the break'
+                kup.text 'Before the break'
                 kup.br()
-                kup.addText 'After the break'
+                kup.text 'After the break'
 
 console.log kup.htmlOut
 ```
@@ -106,11 +106,11 @@ kup = new Kup
 
 #### Script Tags
 
-The `addText` function doesn't escape the string you pass to it:
+The `text` function doesn't escape the string you pass to it:
 
 ```coffeescript
 kup.script ->
-    kup.addText 'javascript which should not be escaped'
+    kup.text 'javascript which should not be escaped'
 ```
 
 ### Credit
