@@ -97,7 +97,7 @@ After the break
 
 ```coffeescript
 Kup = require 'kup'
-{escape} = require 'html-escape'
+escape = require 'html-escape'
 
 kup = new Kup
     sanitizeContent: escape.content
