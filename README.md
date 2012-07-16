@@ -106,6 +106,8 @@ kup = new Kup
 
 #### Script Tags
 
+The `addText` function doesn't escape the string you pass to it:
+
 ```coffeescript
 kup.script ->
     kup.addText 'javascript which should not be escaped'
