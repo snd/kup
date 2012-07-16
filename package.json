@@ -1,11 +1,11 @@
 {
     "author": "Maximilian Krüger <kruemaxi@googlemail.com> (http://github.com/snd)",
-    "name": "up",
-    "description": "simple html5 builder",
-    "version": "1.0.0",
+    "name": "kup",
+    "description": "generate html from pure coffeescript",
+    "version": "1.1.0",
     "dependencies": {},
     "repository": {
         "type": "git",
-        "url": "git://github.com/snd/up.git"
+        "url": "git://github.com/snd/kup.git"
     }
 }
