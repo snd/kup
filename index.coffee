@@ -1,11 +1,14 @@
-open = (name, attrs) ->
-    out = "<#{name}"
-    (out += " #{k}=\"#{v}\"") for k, v of attrs
-    out
+module.exports = kup = class
 
-module.exports = up = class
+    constructor: (@options) -> @htmlOut = ''
 
-    constructor: -> @htmlOut = ''
+    _sanitizeAttribute: (string) ->
+        return string if (typeof @options?.sanitizeAttribute) isnt 'function'
+        @options.sanitizeAttribute string
+
+    _sanitizeContent: (string) ->
+        return string if (typeof @options?.sanitizeContent) isnt 'function'
+        @options.sanitizeContent string
 
     doctype: -> @htmlOut += '<!DOCTYPE html>\n'
 
@@ -14,12 +17,18 @@ module.exports = up = class
             content = attrs
             attrs = null
 
-        @htmlOut += open(name, attrs) + '>\n'
-        @htmlOut += content + '\n' if (typeof content) is 'string'
+        @htmlOut += @open(name, attrs) + '>\n'
+        @htmlOut += (@_sanitizeContent content) + '\n' if (typeof content) is 'string'
         content?()
         @htmlOut += "</#{name}>\n"
 
-    empty: (name, attrs) -> @htmlOut += open(name, attrs) + ' />\n'
+    open: (name, attrs) ->
+        out = "<#{name}"
+        for k, v of attrs
+            out += " #{k}=\"#{@_sanitizeAttribute v}\""
+        out
+
+    empty: (name, attrs) -> @htmlOut += @open(name, attrs) + ' />\n'
 
     addText: (string) -> @htmlOut += string + '\n'
 
@@ -33,11 +42,11 @@ regular = 'a abbr address article aside audio b bdi bdo blockquote body button
 
 for tagName in regular
     do (tagName) ->
-        up.prototype[tagName] = (attrs, content) -> @tag tagName, attrs, content
+        kup.prototype[tagName] = (attrs, content) -> @tag tagName, attrs, content
 
 empty = 'area base br col command embed hr img input keygen link meta
     param source track wbr'.split(/[\n ]+/)
 
 for tagName in empty
     do (tagName) ->
-        up.prototype[tagName] = (attrs, content) -> @empty tagName, attrs, content
+        kup.prototype[tagName] = (attrs, content) -> @empty tagName, attrs, content
