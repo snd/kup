@@ -2,6 +2,9 @@
 
 generate html from pure coffeescript
 
+**Warning:** using Kup naively will leave you vulnerable to XSS attacks.
+See section: *XSS Prevention* below for solutions.
+
 ### Install
 
     npm install kup
@@ -84,6 +87,28 @@ After the break
 </div>
 </body>
 </html>
+```
+
+### XSS Prevention
+
+[XSS Prevention Cheat Sheet](https://www.owasp.org/index.php/XSS_(Cross_Site_Scripting)_Prevention_Cheat_Sheet)
+
+[HTML Escaping](http://wonko.com/post/html-escaping)
+
+```coffeescript
+Kup = require 'kup'
+{escape} = require 'html-escape'
+
+kup = new Kup
+    sanitizeContent: escape.content
+    sanitizeAttribute: escape.attribute
+```
+
+#### Script Tags
+
+```coffeescript
+kup.script ->
+    kup.addText 'javascript which should not be escaped'
 ```
 
 ### Credit
