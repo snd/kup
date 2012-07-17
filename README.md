@@ -2,9 +2,6 @@
 
 generate html from pure coffeescript
 
-**Warning:** using Kup naively will leave you vulnerable to XSS attacks.
-See section: *XSS Prevention* below for solutions.
-
 ### Install
 
     npm install kup
@@ -16,28 +13,27 @@ this coffeescript program:
 ```coffeescript
 Kup = require 'kup'
 
-kup = new Kup
+k = new Kup
 
-kup.doctype()
+k.doctype()
 
-kup.html ->
-    kup.head ->
-        kup.title 'a title'
-        kup.script {
+k.html ->
+    k.head ->
+        k.title 'a title'
+        k.script
             src: 'http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'
             type: 'text/javascript'
-        }
-    kup.body ->
-        kup.div {id: 'container'}, ->
-            kup.h1 'a heading'
-            kup.h2 {class: 'secondary-heading'}, 'another heading'
-            kup.ul ->
+    k.body ->
+        k.div {id: 'container'}, ->
+            k.h1 'a heading'
+            k.h2 {class: 'secondary-heading'}, 'another heading'
+            k.ul ->
                 'first second third'.split(' ').forEach (x) ->
-                    kup.li -> kup.a x
-            kup.p ->
-                kup.text 'Before the break'
-                kup.br()
-                kup.text 'After the break'
+                    k.li -> k.a x
+            k.p ->
+                k.unsafe 'Before the break'
+                k.br()
+                k.unsafe 'After the break'
 
 console.log kup.htmlOut
 ```
@@ -91,26 +87,21 @@ After the break
 
 ### XSS Prevention
 
-[XSS Prevention Cheat Sheet](https://www.owasp.org/index.php/XSS_%28Cross_Site_Scripting%29_Prevention_Cheat_Sheet)
+in order to prevent [XSS](http://en.wikipedia.org/wiki/Cross-site_scripting) Kup will:
 
-[HTML Escaping](http://wonko.com/post/html-escaping)
+- [HTML escape content](https://www.owasp.org/index.php/XSS_%28Cross_Site_Scripting%29_Prevention_Cheat_Sheet#RULE_.231_-_HTML_Escape_Before_Inserting_Untrusted_Data_into_HTML_Element_Content)
+- [escape attributes](https://www.owasp.org/index.php/XSS_%28Cross_Site_Scripting%29_Prevention_Cheat_Sheet#RULE_.232_-_Attribute_Escape_Before_Inserting_Untrusted_Data_into_HTML_Common_Attributes)
+    - Kup properly escapes all attributes with double quotes
+    - properly quoted attributes can only be escaped with the corresponding quote
+    - Kup escapes all double quotes inside attributes to prevent escaping
 
-```coffeescript
-Kup = require 'kup'
-escape = require 'html-escape'
+#### Disable XSS Prevention selectively
 
-kup = new Kup
-    sanitizeContent: escape.content
-    sanitizeAttribute: escape.attribute
-```
-
-#### Script Tags
-
-The `text` function doesn't escape the string you pass to it:
+The `unsafe` function doesn't escape the string you pass to it:
 
 ```coffeescript
 kup.script ->
-    kup.text 'javascript which should not be escaped'
+    kup.unsafe 'javascript which should not be escaped'
 ```
 
 ### Credit
