@@ -35,7 +35,7 @@ k.html ->
                 k.br()
                 k.unsafe 'After the break'
 
-console.log kup.htmlOut
+console.log k.htmlOut
 ```
 
 will generate this html:
@@ -44,42 +44,26 @@ will generate this html:
 <!DOCTYPE html>
 <html>
 <head>
-<title>
-a title
-</title>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript">
-</script>
+<title>a title</title>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
 </head>
 <body>
 <div id="container">
-<h1>
-a heading
-</h1>
-<h2 class="secondary-heading">
-another heading
-</h2>
+<h1>a heading</h1>
+<h2 class="secondary-heading">another heading</h2>
 <ul>
 <li>
-<a>
-first
-</a>
+<a>first</a>
 </li>
 <li>
-<a>
-second
-</a>
+<a>second</a>
 </li>
 <li>
-<a>
-third
-</a>
+<a>third</a>
 </li>
 </ul>
-<p>
-Before the break
-<br />
-After the break
-</p>
+<p>Before the break<br />
+After the break</p>
 </div>
 </body>
 </html>
