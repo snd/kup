@@ -114,7 +114,7 @@ Kup is a rewrite of [mark hahn's](https://github.com/mark-hahn) [drykup](https:/
 - much smaller codebase
 - twice as fast
 - no indentation of the generated code
-- hooks for xss prevention
+- xss prevention
 - only html5 doctype
 
 ### License: MIT
