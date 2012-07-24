@@ -20,6 +20,12 @@ module.exports =
                 test.equals kup.htmlOut, '<a id="container" class="active danger"></a>\n'
                 test.done()
 
+            'with number': (test) ->
+                kup = new Kup
+                kup.th 1
+                test.equals kup.htmlOut, '<th>1</th>\n'
+                test.done()
+
         'text content':
             'without attributes': (test) ->
                 kup = new Kup
