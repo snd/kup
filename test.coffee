@@ -52,6 +52,13 @@ module.exports =
                 test.equals kup.htmlOut, '<p id="container" class="active danger">\n<a>First Indent</a>\n<p>\n<a>Second Indent</a>\n</p>\n</p>\n'
                 test.done()
 
+        'number as content': (test) ->
+            kup = new Kup
+            kup.a 10
+            kup.a 10.1
+            test.equals kup.htmlOut, '<a>10</a>\n<a>10.1</a>\n'
+            test.done()
+
     'void':
         'without attributes': (test) ->
             kup = new Kup

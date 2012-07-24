@@ -17,17 +17,18 @@ module.exports = kup = class
     doctype: -> @htmlOut += '<!DOCTYPE html>\n'
 
     tag: (name, attrs, content) ->
-        if (typeof attrs) in ['string', 'function']
+        if typeof attrs isnt 'object'
             content = attrs
             attrs = null
 
         @htmlOut += @open(name, attrs) + '>'
-        switch typeof content
-            when 'string'
-                @htmlOut += encodeContent content
-            when 'function'
-                @htmlOut += '\n'
-                content?()
+        type = typeof content
+        if type is 'function'
+            @htmlOut += '\n'
+            content()
+        else if content?
+            stringContent = if type isnt 'string' then content.toString() else content
+            @htmlOut += encodeContent stringContent
         @htmlOut += "</#{name}>\n"
 
     open: (name, attrs) ->
