@@ -17,13 +17,15 @@ module.exports = kup = class
     doctype: -> @htmlOut += '<!DOCTYPE html>\n'
 
     tag: (name, attrs, content) ->
-        if (typeof attrs) in ['string', 'function']
+        if (typeof attrs) in ['number', 'string', 'function']
             content = attrs
             attrs = null
 
         @htmlOut += @open(name, attrs) + '>'
         switch typeof content
             when 'string'
+                @htmlOut += encodeContent content
+            when 'number'
                 @htmlOut += encodeContent content
             when 'function'
                 @htmlOut += '\n'
