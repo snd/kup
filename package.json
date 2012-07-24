@@ -2,7 +2,7 @@
     "author": "Maximilian Krüger <kruemaxi@googlemail.com> (http://github.com/snd)",
     "name": "kup",
     "description": "generate html from pure coffeescript",
-    "version": "1.3.1",
+    "version": "1.3.2",
     "dependencies": {},
     "repository": {
         "type": "git",
