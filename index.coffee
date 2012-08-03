@@ -36,6 +36,9 @@ module.exports = kup = class
         for k, v of attrs
             # XSS prevention for attributes:
             # properly quoted attributes can only be escaped with the corresponding quote
+            if not v?
+                msg = "value of attribute `#{k}` in tag #{name} is undefined or null"
+                throw new Error msg
             out += " #{k}=\"#{v.toString().replace /"/g, '&quot;'}\""
         out
 

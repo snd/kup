@@ -20,6 +20,11 @@ module.exports =
                 test.equals kup.htmlOut, '<a id="container" class="active danger"></a>\n'
                 test.done()
 
+        'throw if attribute name is undefined': (test) ->
+            kup = new Kup
+            test.throws -> kup.a {foo: undefined}
+            test.done()
+
         'text content':
             'without attributes': (test) ->
                 kup = new Kup
