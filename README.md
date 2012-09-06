@@ -8,8 +8,6 @@ generate html from pure coffeescript
 
 ### Use
 
-this coffeescript program:
-
 ```coffeescript
 Kup = require 'kup'
 
@@ -38,7 +36,7 @@ k.html ->
 console.log k.htmlOut
 ```
 
-will generate this html:
+Produces the following HTML:
 
 ```html
 <!DOCTYPE html>
@@ -90,15 +88,6 @@ kup.script ->
 
 ### Credit
 
-Kup is a rewrite of [mark hahn's](https://github.com/mark-hahn) [drykup](https://github.com/mark-hahn/drykup)
-
-#### Differences to drykup
-
-- well tested
-- much smaller codebase
-- twice as fast
-- no indentation of the generated code
-- xss prevention
-- only html5 doctype
+Kup is inspired by [mark hahn's](https://github.com/mark-hahn) [drykup](https://github.com/mark-hahn/drykup)
 
 ### License: MIT
