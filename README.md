@@ -1,12 +1,14 @@
-# Kup
+# kup
 
 generate html from pure coffeescript
 
-### Install
+### install
 
-    npm install kup
+```
+npm install kup
+```
 
-### Use
+### use
 
 ```coffeescript
 Kup = require 'kup'
@@ -67,7 +69,7 @@ After the break</p>
 </html>
 ```
 
-### XSS Prevention
+### XSS prevention
 
 in order to prevent [XSS](http://en.wikipedia.org/wiki/Cross-site_scripting) Kup will:
 
@@ -77,17 +79,24 @@ in order to prevent [XSS](http://en.wikipedia.org/wiki/Cross-site_scripting) Kup
     - properly quoted attributes can only be escaped with the corresponding quote
     - Kup escapes all double quotes inside attributes to prevent escaping
 
-#### Disable XSS Prevention selectively
-
-The `unsafe` function doesn't escape the string you pass to it:
+use the `unsafe` function to insert inner text which will not be escaped:
 
 ```coffeescript
 kup.script ->
     kup.unsafe 'javascript which should not be escaped'
 ```
 
-### Credit
+use the `safe` function to insert inner text which will be escaped:
+
+```coffeescript
+kup.p ->
+    k.safe 'this will be escaped'
+    k.br()
+    k.safe 'this will also be escaped'
+```
+
+### credit
 
 Kup is inspired by [mark hahn's](https://github.com/mark-hahn) [drykup](https://github.com/mark-hahn/drykup)
 
-### License: MIT
+### license: MIT

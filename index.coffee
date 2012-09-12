@@ -46,6 +46,8 @@ module.exports = kup = class
 
     unsafe: (string) -> @htmlOut += string
 
+    safe: (string) -> @htmlOut += encodeContent string
+
 regular = 'a abbr address article aside audio b bdi bdo blockquote body button
     canvas caption cite code colgroup datalist dd del details dfn div dl dt em
     fieldset figcaption figure footer form frameset h1 h2 h3 h4 h5 h6 head header hgroup
