@@ -72,10 +72,10 @@ After the break</p>
 
 ### xss prevention
 
-in order to prevent [xss](http://en.wikipedia.org/wiki/Cross-site_scripting) kup will:
+in order to prevent [xss](http://en.wikipedia.org/wiki/cross-site_scripting) kup will:
 
-- [HTML escape content](https://www.owasp.org/index.php/XSS_%28Cross_Site_Scripting%29_Prevention_Cheat_Sheet#RULE_.231_-_HTML_Escape_Before_Inserting_Untrusted_Data_into_HTML_Element_Content)
-- [escape attributes](https://www.owasp.org/index.php/XSS_%28Cross_Site_Scripting%29_Prevention_Cheat_Sheet#RULE_.232_-_Attribute_Escape_Before_Inserting_Untrusted_Data_into_HTML_Common_Attributes)
+- [html escape content](https://www.owasp.org/index.php/xss_%28cross_site_scripting%29_prevention_cheat_sheet#rule_.231_-_html_escape_before_inserting_untrusted_data_into_html_element_content)
+- [escape attributes](https://www.owasp.org/index.php/xss_%28cross_site_scripting%29_prevention_cheat_sheet#rule_.232_-_attribute_escape_before_inserting_untrusted_data_into_html_common_attributes)
     - Kup properly escapes all attributes with double quotes
     - properly quoted attributes can only be escaped with the corresponding quote
     - Kup escapes all double quotes inside attributes to prevent escaping
