@@ -1,6 +1,7 @@
 # kup
 
-generate html from pure coffeescript
+kup is an html builder for nodejs
+[![Build Status](https://travis-ci.org/snd/kup.png)](https://travis-ci.org/snd/kup)
 
 ### install
 
@@ -38,7 +39,7 @@ k.html ->
 console.log k.htmlOut
 ```
 
-Produces the following HTML:
+produces the following html:
 
 ```html
 <!DOCTYPE html>
@@ -69,9 +70,9 @@ After the break</p>
 </html>
 ```
 
-### XSS prevention
+### xss prevention
 
-in order to prevent [XSS](http://en.wikipedia.org/wiki/Cross-site_scripting) Kup will:
+in order to prevent [xss](http://en.wikipedia.org/wiki/Cross-site_scripting) kup will:
 
 - [HTML escape content](https://www.owasp.org/index.php/XSS_%28Cross_Site_Scripting%29_Prevention_Cheat_Sheet#RULE_.231_-_HTML_Escape_Before_Inserting_Untrusted_Data_into_HTML_Element_Content)
 - [escape attributes](https://www.owasp.org/index.php/XSS_%28Cross_Site_Scripting%29_Prevention_Cheat_Sheet#RULE_.232_-_Attribute_Escape_Before_Inserting_Untrusted_Data_into_HTML_Common_Attributes)
@@ -97,6 +98,6 @@ kup.p ->
 
 ### credit
 
-Kup is inspired by [mark hahn's](https://github.com/mark-hahn) [drykup](https://github.com/mark-hahn/drykup)
+kup is inspired by [mark hahn's](https://github.com/mark-hahn) [drykup](https://github.com/mark-hahn/drykup)
 
 ### license: MIT
