@@ -65,4 +65,4 @@ empty = 'area base br col command embed hr img input keygen link meta
 
 for tagName in empty
     do (tagName) ->
-        kup.prototype[tagName] = (attrs, content) -> @empty tagName, attrs, content
+        kup.prototype[tagName] = (attrs) -> @empty tagName, attrs
