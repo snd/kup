@@ -73,13 +73,12 @@ After the break</p>
 
 ### xss prevention
 
-in order to prevent [xss](http://en.wikipedia.org/wiki/cross-site_scripting) kup will:
+kup will [html escape text content](https://www.owasp.org/index.php/xss_%28cross_site_scripting%29_prevention_cheat_sheet#rule_.231_-_html_escape_before_inserting_untrusted_data_into_html_element_content).
 
-- [html escape content](https://www.owasp.org/index.php/xss_%28cross_site_scripting%29_prevention_cheat_sheet#rule_.231_-_html_escape_before_inserting_untrusted_data_into_html_element_content)
-- [escape attributes](https://www.owasp.org/index.php/xss_%28cross_site_scripting%29_prevention_cheat_sheet#rule_.232_-_attribute_escape_before_inserting_untrusted_data_into_html_common_attributes)
-    - Kup properly escapes all attributes with double quotes
-    - properly quoted attributes can only be escaped with the corresponding quote
-    - Kup escapes all double quotes inside attributes to prevent escaping
+kup will [properly quote attributes using double quotes](https://www.owasp.org/index.php/xss_%28cross_site_scripting%29_prevention_cheat_sheet#rule_.232_-_attribute_escape_before_inserting_untrusted_data_into_html_common_attributes).
+properly quoted attributes can only be escaped with the corresponding quote.
+kup escapes all double quotes inside attributes values to prevent escaping.
+in order to prevent [xss](http://en.wikipedia.org/wiki/cross-site_scripting) kup will:
 
 use the `unsafe` function to insert inner text which will not be escaped:
 
