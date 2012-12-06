@@ -82,14 +82,14 @@ kup escapes all double quotes inside attributes values to prevent escaping.
 use the `unsafe` function to insert inner text which will not be escaped:
 
 ```coffeescript
-kup.script ->
-    kup.unsafe 'javascript which should not be escaped'
+k.script ->
+    k.unsafe 'javascript which should not be escaped'
 ```
 
 use the `safe` function to insert inner text which will be escaped:
 
 ```coffeescript
-kup.p ->
+k.p ->
     k.safe 'this will be escaped'
     k.br()
     k.safe 'this will also be escaped'
