@@ -1,16 +1,32 @@
 {
-    "author": "Maximilian Krüger <kruemaxi@googlemail.com> (http://github.com/snd)",
     "name": "kup",
-    "description": "kup is an html builder",
     "version": "1.3.4",
-    "dependencies": {
-        "coffee-script": "1.3.3"
+    "description": "kup is an html builder for nodejs",
+    "homepage": "http://github.com/snd/kup",
+    "author": {
+        "name": "Maximilian Krüger",
+        "email": "kruemaxi@gmail.com",
+        "url": "http://github.com/snd"
     },
-    "devDependencies": {
-        "nodeunit": "0.7.4"
+    "bugs": {
+        "url": "http://github.com/snd/kup/issues",
+        "email": "kruemaxi@gmail.com"
     },
     "repository": {
         "type": "git",
         "url": "git://github.com/snd/kup.git"
+    },
+    "licenses": {
+        "type": "MIT",
+        "url": "git://github.com/snd/kup/LICENSE"
+    },
+    "engines": {
+        "node": ">=0.8.5"
+    },
+    "dependencies": {
+        "coffee-script": "1.4.0"
+    },
+    "devDependencies": {
+        "nodeunit": "0.7.4"
     }
 }
