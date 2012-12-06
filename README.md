@@ -1,7 +1,8 @@
 # kup
 
-kup is an html builder for nodejs
 [![Build Status](https://travis-ci.org/snd/kup.png)](https://travis-ci.org/snd/kup)
+
+kup is an html builder for nodejs
 
 ### install
 
