@@ -104,15 +104,17 @@ module.exports =
         'simple': (test) ->
             kup = new Kup
             kup.span css: color: 'green'
-            test.equals kup.htmlOut '<span style="color: green;"></span>\n'
+            test.equals kup.htmlOut, '<span style="color: green;"></span>\n'
+            test.done()
 
         'dashed': (test) ->
             kup = new Kup
             kup.span css: backgroundColor: 'red'
-            test.equals kup.htmlOut '<span style="background-color: red;"></span>\n'
+            test.equals kup.htmlOut, '<span style="background-color: red;"></span>\n'
+            test.done()
 
         'with attributes': (test) ->
             kup = new Kup
             kup.span attrsCSS
-            test.equals kup.htmlOut '<span id="container" class="active danger" style="color: green;"></span>\n'
-
+            test.equals kup.htmlOut, '<span id="container" class="active danger" style="color: green;"></span>\n'
+            test.done()
