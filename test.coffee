@@ -4,6 +4,13 @@ attrs =
     id: 'container'
     class: 'active danger'
 
+attrsCSS =
+    id: 'container'
+    class: 'active danger'
+    css:
+        color: 'green'
+        backgroundColor: 'red'
+
 module.exports =
 
     'regular':
@@ -91,3 +98,21 @@ module.exports =
             expected = '<a>&lt;script&gt;alert(&quot;foo&quot;); alert(&#x27;bar&#x27;);&lt;&#x2F;script&gt;</a>\n'
             test.equals kup.htmlOut, expected
             test.done()
+
+    'css':
+
+        'simple': (test) ->
+            kup = new Kup
+            kup.span css: color: 'green'
+            test.equals kup.htmlOut '<span style="color: green;"></span>\n'
+
+        'dashed': (test) ->
+            kup = new Kup
+            kup.span css: backgroundColor: 'red'
+            test.equals kup.htmlOut '<span style="background-color: red;"></span>\n'
+
+        'with attributes': (test) ->
+            kup = new Kup
+            kup.span attrsCSS
+            test.equals kup.htmlOut '<span id="container" class="active danger" style="color: green;"></span>\n'
+
