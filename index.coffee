@@ -9,9 +9,8 @@ contentEncodings =
 contentRegex = /[&<>"'\/]/g
 contentEncoder = (char) -> contentEncodings[char]
 encodeContent = (s) -> s.toString().replace contentRegex, contentEncoder
-# http://www.devcurry.com/2011/07/javascript-convert-camelcase-to-dashes.html
-camelToDash = (str) ->
-    str.replace(/\W+/g, '-').replace /([a-z\d])([A-Z])/g, '$1-$2'
+# http://stackoverflow.com/a/8955580
+camelToDash = (str) -> str.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()
 
 
 module.exports = kup = class
