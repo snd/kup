@@ -9,8 +9,10 @@ contentEncodings =
 contentRegex = /[&<>"'\/]/g
 contentEncoder = (char) -> contentEncodings[char]
 encodeContent = (s) -> s.toString().replace contentRegex, contentEncoder
-camel2dashed = (s) ->
-    strtolower preg_replace "/([a-zA-Z])(?=[A-Z])/", "$1-", s
+# http://www.devcurry.com/2011/07/javascript-convert-camelcase-to-dashes.html
+camelToDash = (str) ->
+    str.replace(/\W+/g, '-').replace /([a-z\d])([A-Z])/g, '$1-$2'
+
 
 module.exports = kup = class
 
