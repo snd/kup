@@ -58,7 +58,7 @@ module.exports = kup = class
     css: (css) ->
         r = ""
         for k, v of css
-            r += " #{camel2dashed k}: #{v};"
+            r += " #{camelToDash k}: #{v};"
         r.slice 1
 
 regular = 'a abbr address article aside audio b bdi bdo blockquote body button
