@@ -1,6 +1,6 @@
 # kup
 
-[![Build Status](https://travis-ci.org/snd/kup.png)](https://travis-ci.org/snd/kup)
+[![Build Status](https://travis-ci.org/PierreGaudichon/kup.png)](https://travis-ci.org/PierreGaudichon/kup)
 
 kup is an html builder for nodejs
 

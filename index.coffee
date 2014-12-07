@@ -9,6 +9,9 @@ contentEncodings =
 contentRegex = /[&<>"'\/]/g
 contentEncoder = (char) -> contentEncodings[char]
 encodeContent = (s) -> s.toString().replace contentRegex, contentEncoder
+# http://stackoverflow.com/a/8955580
+camelToDash = (str) -> str.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()
+
 
 module.exports = kup = class
 
@@ -39,7 +42,10 @@ module.exports = kup = class
             if not v?
                 msg = "value of attribute `#{k}` in tag #{name} is undefined or null"
                 throw new Error msg
-            out += " #{k}=\"#{v.toString().replace /"/g, '&quot;'}\""
+            else if k is "css"
+                out += " style=\"#{@css v}\""
+            else
+                out += " #{k}=\"#{v.toString().replace /"/g, '&quot;'}\""
         out
 
     empty: (name, attrs) -> @htmlOut += @open(name, attrs) + ' />\n'
@@ -47,6 +53,12 @@ module.exports = kup = class
     unsafe: (string) -> @htmlOut += string
 
     safe: (string) -> @htmlOut += encodeContent string
+
+    css: (css) ->
+        r = ""
+        for k, v of css
+            r += " #{camelToDash k}: #{v};"
+        r.slice 1
 
 regular = 'a abbr address article aside audio b bdi bdo blockquote body button
     canvas caption cite code colgroup datalist dd del details dfn div dl dt em
