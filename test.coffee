@@ -116,5 +116,5 @@ module.exports =
         'with attributes': (test) ->
             kup = new Kup
             kup.span attrsCSS
-            test.equals kup.htmlOut, '<span id="container" class="active danger" style="color: green;"></span>\n'
+            test.equals kup.htmlOut, '<span id="container" class="active danger" style="color: green; background-color: red;"></span>\n'
             test.done()
