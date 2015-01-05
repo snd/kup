@@ -60,8 +60,7 @@ Kup.prototype =
       # XSS prevention for attributes:
       # properly quoted attributes can only be escaped with the corresponding quote
       if not v?
-        msg = "value of attribute `#{k}` in tag #{tag} is undefined or null"
-        throw new Error msg
+        throw new Error "value of attribute `#{k}` in tag #{tag} is undefined or null"
       out += " #{k}=\"#{@encodeAttribute(v)}\""
     out
 
