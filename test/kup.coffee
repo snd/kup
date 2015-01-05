@@ -5,10 +5,17 @@ attrs =
   class: 'active danger'
 
 module.exports =
-  'throw if attribute name is undefined': (test) ->
-    k = new Kup
-    test.throws -> k.a {foo: undefined}
-    test.done()
+
+  'errors':
+
+    'attribute value undefined': (test) ->
+      test.expect 1
+      k = new Kup
+      try
+        k.a {foo: undefined}
+      catch e
+        test.equal e.message, 'value of attribute `foo` in tag `a` is undefined or null'
+      test.done()
 
   'regular tag (with content)':
 
