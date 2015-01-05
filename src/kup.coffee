@@ -36,41 +36,39 @@ Kup.prototype =
     @htmlOut += '<!DOCTYPE html>'
     @newline()
 
-  tag: (name, attrs, content) ->
+  tag: (tag, attrs, content) ->
     if 'object' isnt typeof attrs
       content = attrs
       attrs = null
 
-    @beforeOpen?(name, attrs)
-    @htmlOut += @open(name, attrs) + '>'
+    @beforeOpen?(tag, attrs)
+    @htmlOut += @open(tag, attrs) + '>'
+    @afterOpen?(tag, attrs, content)
     type = typeof content
     if type is 'function'
-      @afterOpen?(name, attrs)
       content()
-      @beforeClose?(name, attrs)
     else if content?
-      @beforeInnerText?(name, attrs)
       stringContent = if type isnt 'string' then content.toString() else content
       @htmlOut += @encodeContent stringContent
-      @afterInnerText?(name, attrs)
-    @htmlOut += "</#{name}>"
-    @afterClose?(name, attrs)
+    @beforeClose?(tag, attrs, content)
+    @htmlOut += "</#{tag}>"
+    @afterClose?(tag, attrs)
 
-  open: (name, attrs) ->
-    out = "<#{name}"
+  open: (tag, attrs) ->
+    out = "<#{tag}"
     for k, v of attrs
       # XSS prevention for attributes:
       # properly quoted attributes can only be escaped with the corresponding quote
       if not v?
-        msg = "value of attribute `#{k}` in tag #{name} is undefined or null"
+        msg = "value of attribute `#{k}` in tag #{tag} is undefined or null"
         throw new Error msg
       out += " #{k}=\"#{@encodeAttribute(v)}\""
     out
 
-  empty: (name, attrs) ->
-    @beforeEmpty?(name, attrs)
-    @htmlOut += @open(name, attrs) + ' />'
-    @afterEmpty?(name, attrs)
+  empty: (tag, attrs) ->
+    @beforeEmpty?(tag, attrs)
+    @htmlOut += @open(tag, attrs) + ' />'
+    @afterEmpty?(tag, attrs)
 
   unsafe: (string) ->
     @htmlOut += string
@@ -89,14 +87,14 @@ regular = 'a abbr address article aside audio b bdi bdo blockquote body button
   select small span strong sub summary sup table tbody td textarea tfoot
   th thead time title tr u ul video style'.split(/[\n ]+/)
 
-for tagName in regular
-  do (tagName) ->
-    Kup.prototype[tagName] = (attrs, content) ->
-      @tag tagName, attrs, content
+for tag in regular
+  do (tag) ->
+    Kup.prototype[tag] = (attrs, content) ->
+      @tag tag, attrs, content
 
 empty = 'area base br col command embed hr img input keygen link meta
   param source track wbr frame'.split(/[\n ]+/)
 
-for tagName in empty
-  do (tagName) ->
-    Kup.prototype[tagName] = (attrs) -> @empty tagName, attrs
+for tag in empty
+  do (tag) ->
+    Kup.prototype[tag] = (attrs) -> @empty tag, attrs
