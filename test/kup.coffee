@@ -118,7 +118,6 @@ module.exports =
     test.equals k.htmlOut, '<!DOCTYPE html><a></a>'
     test.done()
 
-
   'encode':
 
     'attribute': (test) ->
