@@ -133,170 +133,26 @@ module.exports =
       test.equals k.htmlOut, expected
       test.done()
 
-  'hooks':
+  'newlines': (test) ->
+    k = new Kup
 
-    'calls': (test) ->
+    k.newline = ->
+      @htmlOut += '\n'
+    # add newlines after opening tag and after closing tag
+    k.tag = (tag, attrs, content) ->
+      @open tag, attrs
+      if 'function' is typeof content
+        @newline()
+      @content content
+      @close tag
+      @newline()
 
-      k = new Kup
+    k.html ->
+      k.div()
+      k.p ->
+        k.div ->
+          k.p 'test'
 
-      calls = []
+    test.equal k.htmlOut, '<html>\n<div></div>\n<p>\n<div>\n<p>test</p>\n</div>\n</p>\n</html>\n'
 
-      k.beforeOpen = (tag, attrs, content) ->
-        calls.push
-          type: 'beforeOpen'
-          tag: tag
-          attrs: attrs
-          content: content
-      k.afterOpen = (tag, attrs, content) ->
-        calls.push
-          type: 'afterOpen'
-          tag: tag
-          attrs: attrs
-          content: content
-      k.beforeClose = (tag, attrs, content) ->
-        calls.push
-          type: 'beforeClose'
-          tag: tag
-          attrs: attrs
-          content: content
-      k.afterClose = (tag, attrs, content) ->
-        calls.push
-          type: 'afterClose'
-          tag: tag
-          attrs: attrs
-          content: content
-      k.beforeVoid = (tag, attrs) ->
-        calls.push
-          type: 'beforeVoid'
-          tag: tag
-          attrs: attrs
-      k.afterVoid = (tag, attrs) ->
-        calls.push
-          type: 'afterVoid'
-          tag: tag
-          attrs: attrs
-
-      insideHtml = ->
-        k.img attrs
-        k.div()
-        k.p 'test'
-        k.br()
-
-      k.html attrs, insideHtml
-
-      test.deepEqual calls, [
-        {
-          type: 'beforeOpen'
-          tag: 'html'
-          attrs: attrs
-          content: insideHtml
-        }
-        {
-          type: 'afterOpen'
-          tag: 'html'
-          attrs: attrs
-          content: insideHtml
-        }
-        {
-          type: 'beforeVoid'
-          tag: 'img'
-          attrs: attrs
-        }
-        {
-          type: 'afterVoid'
-          tag: 'img'
-          attrs: attrs
-        }
-        {
-          type: 'beforeOpen'
-          tag: 'div'
-          attrs: undefined
-          content: undefined
-        }
-        {
-          type: 'afterOpen'
-          tag: 'div'
-          attrs: undefined
-          content: undefined
-        }
-        {
-          type: 'beforeClose'
-          tag: 'div'
-          attrs: undefined
-          content: undefined
-        }
-        {
-          type: 'afterClose'
-          tag: 'div'
-          attrs: undefined
-          content: undefined
-        }
-        {
-          type: 'beforeOpen'
-          tag: 'p'
-          attrs: undefined
-          content: 'test'
-        }
-        {
-          type: 'afterOpen'
-          tag: 'p'
-          attrs: undefined
-          content: 'test'
-        }
-        {
-          type: 'beforeClose'
-          tag: 'p'
-          attrs: undefined
-          content: 'test'
-        }
-        {
-          type: 'afterClose'
-          tag: 'p'
-          attrs: undefined
-          content: 'test'
-        }
-        {
-          type: 'beforeVoid'
-          tag: 'br'
-          attrs: undefined
-        }
-        {
-          type: 'afterVoid'
-          tag: 'br'
-          attrs: undefined
-        }
-        {
-          type: 'beforeClose'
-          tag: 'html'
-          attrs: attrs
-          content: insideHtml
-        }
-        {
-          type: 'afterClose'
-          tag: 'html'
-          attrs: attrs
-          content: insideHtml
-        }
-      ]
-
-      test.done()
-
-    'newlines': (test) ->
-
-      k = new Kup
-
-      k.afterOpen = (tag, attrs, content) ->
-        if 'function' is typeof content
-          @unsafe '\n'
-      k.afterClose = (tag, attrs, content) ->
-        @unsafe '\n'
-
-      k.html ->
-        k.div()
-        k.p ->
-          k.div ->
-            k.p 'test'
-
-      test.equal k.htmlOut, '<html>\n<div></div>\n<p>\n<div>\n<p>test</p>\n</div>\n</p>\n</html>\n'
-
-      test.done()
+    test.done()

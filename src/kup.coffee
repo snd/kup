@@ -36,24 +36,25 @@ Kup.prototype =
     @htmlOut += '<!DOCTYPE html>'
 
   tag: (tag, attrs, content) ->
-    if 'object' isnt typeof attrs
-      content = attrs
-      attrs = undefined
+    @open tag, attrs
+    @content content
+    @close tag
 
-    @beforeOpen?(tag, attrs, content)
-    @htmlOut += @open(tag, attrs) + '>'
-    @afterOpen?(tag, attrs, content)
+  open: (tag, attrs) ->
+    @htmlOut += @prefix(tag, attrs) + '>'
+
+  content: (content) ->
     type = typeof content
     if type is 'function'
       content()
     else if content?
       stringContent = if type isnt 'string' then content.toString() else content
       @htmlOut += @encodeContent stringContent
-    @beforeClose?(tag, attrs, content)
-    @htmlOut += "</#{tag}>"
-    @afterClose?(tag, attrs, content)
 
-  open: (tag, attrs) ->
+  close: (tag) ->
+    @htmlOut += "</#{tag}>"
+
+  prefix: (tag, attrs) ->
     out = "<#{tag}"
     for k, v of attrs
       # XSS prevention for attributes:
@@ -61,17 +62,10 @@ Kup.prototype =
       if not v?
         throw new Error "value of attribute `#{k}` in tag `#{tag}` is undefined or null"
       out += " #{k}=\"#{@encodeAttribute(v)}\""
-    out
+    return out
 
-  empty: (tag, attrs, content) ->
-    if 'object' isnt typeof attrs
-      content = attrs
-      attrs = undefined
-    if content?
-      throw new Error "void tag `#{tag}` accepts no content but content `#{content}` was given"
-    @beforeVoid?(tag, attrs)
-    @htmlOut += @open(tag, attrs) + ' />'
-    @afterVoid?(tag, attrs)
+  empty: (tag, attrs) ->
+    @htmlOut += @prefix(tag, attrs) + ' />'
 
   unsafe: (string) ->
     @htmlOut += string
@@ -93,6 +87,9 @@ regular = 'a abbr address article aside audio b bdi bdo blockquote body button
 for tag in regular
   do (tag) ->
     Kup.prototype[tag] = (attrs, content) ->
+      if 'object' isnt typeof attrs
+        content = attrs
+        attrs = undefined
       @tag tag, attrs, content
 
 empty = 'area base br col command embed hr img input keygen link meta
@@ -101,4 +98,9 @@ empty = 'area base br col command embed hr img input keygen link meta
 for tag in empty
   do (tag) ->
     Kup.prototype[tag] = (attrs, content) ->
+      if 'object' isnt typeof attrs
+        content = attrs
+        attrs = undefined
+      if content?
+        throw new Error "void tag `#{tag}` accepts no content but content `#{content}` was given"
       @empty tag, attrs, content
