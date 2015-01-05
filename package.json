@@ -1,32 +1,45 @@
 {
-    "name": "kup",
-    "version": "1.3.4",
-    "description": "kup is an html builder for nodejs",
-    "homepage": "http://github.com/snd/kup",
-    "author": {
-        "name": "Maximilian Krüger",
-        "email": "kruemaxi@gmail.com",
-        "url": "http://github.com/snd"
-    },
-    "bugs": {
-        "url": "http://github.com/snd/kup/issues",
-        "email": "kruemaxi@gmail.com"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git://github.com/snd/kup.git"
-    },
-    "licenses": {
-        "type": "MIT",
-        "url": "git://github.com/snd/kup/LICENSE"
-    },
-    "engines": {
-        "node": ">=0.8.5"
-    },
-    "dependencies": {
-        "coffee-script": "1.4.0"
-    },
-    "devDependencies": {
-        "nodeunit": "0.7.4"
-    }
+  "name": "kup",
+  "version": "1.4.0",
+  "description": "kup is an html builder for nodejs",
+  "keywords": [
+    "template",
+    "html",
+    "builder",
+    "coffeescript"
+  ],
+  "homepage": "http://github.com/snd/kup",
+  "author": {
+    "name": "Maximilian Krüger",
+    "email": "kruemaxi@gmail.com",
+    "url": "http://github.com/snd"
+  },
+  "bugs": {
+    "url": "http://github.com/snd/kup/issues",
+    "email": "kruemaxi@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/snd/kup.git"
+  },
+  "licenses": {
+    "type": "MIT",
+    "url": "git://github.com/snd/kup/LICENSE"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "dependencies": {
+    "coffee-script": "1.8.0"
+  },
+  "devDependencies": {
+    "nodeunit": "0.9.0"
+  },
+  "scripts": {
+    "compile": "node_modules/coffee-script/bin/coffee --bare --compile --output lib/ src/",
+    "prepublish": "npm run compile",
+    "pretest": "npm run compile",
+    "test": "node_modules/nodeunit/bin/nodeunit test/*.coffee || :"
+  },
+  "main": "lib/kup"
 }
