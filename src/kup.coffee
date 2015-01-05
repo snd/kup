@@ -33,22 +33,28 @@ Kup.prototype =
   encodeAttribute: encodeAttribute
 
   doctype: ->
-    @htmlOut += '<!DOCTYPE html>\n'
+    @htmlOut += '<!DOCTYPE html>'
+    @newline()
 
   tag: (name, attrs, content) ->
     if 'object' isnt typeof attrs
       content = attrs
       attrs = null
 
+    @beforeOpen?(name, attrs)
     @htmlOut += @open(name, attrs) + '>'
     type = typeof content
     if type is 'function'
-      @htmlOut += '\n'
+      @afterOpen?(name, attrs)
       content()
+      @beforeClose?(name, attrs)
     else if content?
+      @beforeInnerText?(name, attrs)
       stringContent = if type isnt 'string' then content.toString() else content
       @htmlOut += @encodeContent stringContent
-    @htmlOut += "</#{name}>\n"
+      @afterInnerText?(name, attrs)
+    @htmlOut += "</#{name}>"
+    @afterClose?(name, attrs)
 
   open: (name, attrs) ->
     out = "<#{name}"
@@ -62,7 +68,9 @@ Kup.prototype =
     out
 
   empty: (name, attrs) ->
-    @htmlOut += @open(name, attrs) + ' />\n'
+    @beforeEmpty?(name, attrs)
+    @htmlOut += @open(name, attrs) + ' />'
+    @afterEmpty?(name, attrs)
 
   unsafe: (string) ->
     @htmlOut += string
