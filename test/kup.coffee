@@ -280,3 +280,23 @@ module.exports =
       ]
 
       test.done()
+
+    'newlines': (test) ->
+
+      k = new Kup
+
+      k.afterOpen = (tag, attrs, content) ->
+        if 'function' is typeof content
+          @unsafe '\n'
+      k.afterClose = (tag, attrs, content) ->
+        @unsafe '\n'
+
+      k.html ->
+        k.div()
+        k.p ->
+          k.div ->
+            k.p 'test'
+
+      test.equal k.htmlOut, '<html>\n<div></div>\n<p>\n<div>\n<p>test</p>\n</div>\n</p>\n</html>\n'
+
+      test.done()
