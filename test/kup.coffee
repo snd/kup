@@ -156,3 +156,39 @@ module.exports =
     test.equal k.htmlOut, '<html>\n<div></div>\n<p>\n<div>\n<p>test</p>\n</div>\n</p>\n</html>\n'
 
     test.done()
+
+  'style':
+
+    'string': (test) ->
+      k = new Kup
+      k.div
+        style: "color: blue"
+      test.equal k.htmlOut, "<div style=\"color: blue\"></div>"
+      test.done()
+
+    'style object with camelcase': (test) ->
+      k = new Kup
+      k.div
+        style:
+          color: 'blue'
+          backgroundImage: 'url(test.png)'
+          msTransition: 'all'
+      test.equal k.htmlOut, "<div style=\"color: blue; background-image: url(test.png); ms-transition: all;\"></div>"
+      test.done()
+
+    'style object with dashcase': (test) ->
+      k = new Kup
+      k.div
+        style:
+          color: 'blue'
+          'background-image': 'url(test.png)'
+          'ms-transition': 'all'
+      test.equal k.htmlOut, "<div style=\"color: blue; background-image: url(test.png); ms-transition: all;\"></div>"
+      test.done()
+
+    'empty style object': (test) ->
+      k = new Kup
+      k.div
+        style: {}
+      test.equal k.htmlOut, "<div style=\"\"></div>"
+      test.done()
