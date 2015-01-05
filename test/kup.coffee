@@ -139,8 +139,8 @@ module.exports =
     k.newline = ->
       @htmlOut += '\n'
     # add newlines after opening tag and after closing tag
-    k.tag = (tag, ATTRS, content) ->
-      @open tag, ATTRS
+    k.tag = (tag, attrs, content) ->
+      @open tag, attrs
       if 'function' is typeof content
         @newline()
       @content content
