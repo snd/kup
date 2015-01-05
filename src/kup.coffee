@@ -1,3 +1,12 @@
+################################################################################
+# exports and constructor
+
+module.exports = Kup = ->
+  @htmlOut = ''
+
+################################################################################
+# encode
+
 contentEncodings =
   '&': '&amp;'
   '<': '&lt;'
@@ -6,18 +15,28 @@ contentEncodings =
   '\'': '&#x27;'
   '/': '&#x2F;'
 
+# matches any of the chars that are keys in `contentEncodings` above
 contentRegex = /[&<>"'\/]/g
-contentEncoder = (char) -> contentEncodings[char]
-encodeContent = (s) -> s.toString().replace contentRegex, contentEncoder
+encodeContentChar = (char) -> contentEncodings[char]
+encodeContent = (content) ->
+  content.toString().replace contentRegex, encodeContentChar
 
-module.exports = kup = class
+encodeAttribute = (value) ->
+  value.toString().replace /"/g, '&quot;'
 
-  constructor: -> @htmlOut = ''
+################################################################################
+# API
 
-  doctype: -> @htmlOut += '<!DOCTYPE html>\n'
+Kup.prototype =
+
+  encodeContent: encodeContent
+  encodeAttribute: encodeAttribute
+
+  doctype: ->
+    @htmlOut += '<!DOCTYPE html>\n'
 
   tag: (name, attrs, content) ->
-    if typeof attrs isnt 'object'
+    if 'object' isnt typeof attrs
       content = attrs
       attrs = null
 
@@ -28,7 +47,7 @@ module.exports = kup = class
       content()
     else if content?
       stringContent = if type isnt 'string' then content.toString() else content
-      @htmlOut += encodeContent stringContent
+      @htmlOut += @encodeContent stringContent
     @htmlOut += "</#{name}>\n"
 
   open: (name, attrs) ->
@@ -39,14 +58,20 @@ module.exports = kup = class
       if not v?
         msg = "value of attribute `#{k}` in tag #{name} is undefined or null"
         throw new Error msg
-      out += " #{k}=\"#{v.toString().replace /"/g, '&quot;'}\""
+      out += " #{k}=\"#{@encodeAttribute(v)}\""
     out
 
-  empty: (name, attrs) -> @htmlOut += @open(name, attrs) + ' />\n'
+  empty: (name, attrs) ->
+    @htmlOut += @open(name, attrs) + ' />\n'
 
-  unsafe: (string) -> @htmlOut += string
+  unsafe: (string) ->
+    @htmlOut += string
 
-  safe: (string) -> @htmlOut += encodeContent string
+  safe: (string) ->
+    @htmlOut += @encodeContent string
+
+################################################################################
+# tags
 
 regular = 'a abbr address article aside audio b bdi bdo blockquote body button
   canvas caption cite code colgroup datalist dd del details dfn div dl dt em
@@ -58,11 +83,12 @@ regular = 'a abbr address article aside audio b bdi bdo blockquote body button
 
 for tagName in regular
   do (tagName) ->
-    kup.prototype[tagName] = (attrs, content) -> @tag tagName, attrs, content
+    Kup.prototype[tagName] = (attrs, content) ->
+      @tag tagName, attrs, content
 
 empty = 'area base br col command embed hr img input keygen link meta
   param source track wbr frame'.split(/[\n ]+/)
 
 for tagName in empty
   do (tagName) ->
-    kup.prototype[tagName] = (attrs) -> @empty tagName, attrs
+    Kup.prototype[tagName] = (attrs) -> @empty tagName, attrs
