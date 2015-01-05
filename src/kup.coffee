@@ -64,7 +64,12 @@ Kup.prototype =
       out += " #{k}=\"#{@encodeAttribute(v)}\""
     out
 
-  empty: (tag, attrs) ->
+  empty: (tag, attrs, content) ->
+    if 'object' isnt typeof attrs
+      content = attrs
+      attrs = null
+    if content?
+      throw new Error "void tag `#{tag}` accepts no content but content `#{content}` was given"
     @beforeEmpty?(tag, attrs)
     @htmlOut += @open(tag, attrs) + ' />'
     @afterEmpty?(tag, attrs)
@@ -96,4 +101,5 @@ empty = 'area base br col command embed hr img input keygen link meta
 
 for tag in empty
   do (tag) ->
-    Kup.prototype[tag] = (attrs) -> @empty tag, attrs
+    Kup.prototype[tag] = (attrs, content) ->
+      @empty tag, attrs, content

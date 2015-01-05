@@ -17,6 +17,23 @@ module.exports =
         test.equal e.message, 'value of attribute `foo` in tag `a` is undefined or null'
       test.done()
 
+    'content given to void tag': (test) ->
+      test.expect 2
+
+      k = new Kup
+      try
+        k.img 'test'
+      catch e
+        test.equal e.message, 'void tag `img` accepts no content but content `test` was given'
+
+      k = new Kup
+      try
+        k.img {a: 1}, 'test'
+      catch e
+        test.equal e.message, 'void tag `img` accepts no content but content `test` was given'
+
+      test.done()
+
   'regular tag (with content)':
 
     'empty':
