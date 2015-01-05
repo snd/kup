@@ -132,3 +132,151 @@ module.exports =
       expected = '<a>&lt;script&gt;alert(&quot;foo&quot;); alert(&#x27;bar&#x27;);&lt;&#x2F;script&gt;</a>'
       test.equals k.htmlOut, expected
       test.done()
+
+  'hooks':
+
+    'calls': (test) ->
+
+      k = new Kup
+
+      calls = []
+
+      k.beforeOpen = (tag, attrs, content) ->
+        calls.push
+          type: 'beforeOpen'
+          tag: tag
+          attrs: attrs
+          content: content
+      k.afterOpen = (tag, attrs, content) ->
+        calls.push
+          type: 'afterOpen'
+          tag: tag
+          attrs: attrs
+          content: content
+      k.beforeVoid = (tag, attrs) ->
+        calls.push
+          type: 'beforeVoid'
+          tag: tag
+          attrs: attrs
+      k.afterVoid = (tag, attrs) ->
+        calls.push
+          type: 'afterVoid'
+          tag: tag
+          attrs: attrs
+      k.beforeClose = (tag, attrs, content) ->
+        calls.push
+          type: 'beforeClose'
+          tag: tag
+          attrs: attrs
+          content: content
+      k.afterClose = (tag, attrs, content) ->
+        calls.push
+          type: 'afterClose'
+          tag: tag
+          attrs: attrs
+          content: content
+
+      insideHtml = ->
+        k.img attrs
+        k.div()
+        k.p 'test'
+        k.br()
+
+      k.html attrs, insideHtml
+
+      test.deepEqual calls, [
+        {
+          type: 'beforeOpen'
+          tag: 'html'
+          attrs: attrs
+          content: insideHtml
+        }
+        {
+          type: 'afterOpen'
+          tag: 'html'
+          attrs: attrs
+          content: insideHtml
+        }
+        {
+          type: 'beforeVoid'
+          tag: 'img'
+          attrs: attrs
+        }
+        {
+          type: 'afterVoid'
+          tag: 'img'
+          attrs: attrs
+        }
+        {
+          type: 'beforeOpen'
+          tag: 'div'
+          attrs: undefined
+          content: undefined
+        }
+        {
+          type: 'afterOpen'
+          tag: 'div'
+          attrs: undefined
+          content: undefined
+        }
+        {
+          type: 'beforeClose'
+          tag: 'div'
+          attrs: undefined
+          content: undefined
+        }
+        {
+          type: 'afterClose'
+          tag: 'div'
+          attrs: undefined
+          content: undefined
+        }
+        {
+          type: 'beforeOpen'
+          tag: 'p'
+          attrs: undefined
+          content: 'test'
+        }
+        {
+          type: 'afterOpen'
+          tag: 'p'
+          attrs: undefined
+          content: 'test'
+        }
+        {
+          type: 'beforeClose'
+          tag: 'p'
+          attrs: undefined
+          content: 'test'
+        }
+        {
+          type: 'afterClose'
+          tag: 'p'
+          attrs: undefined
+          content: 'test'
+        }
+        {
+          type: 'beforeVoid'
+          tag: 'br'
+          attrs: undefined
+        }
+        {
+          type: 'afterVoid'
+          tag: 'br'
+          attrs: undefined
+        }
+        {
+          type: 'beforeClose'
+          tag: 'html'
+          attrs: attrs
+          content: insideHtml
+        }
+        {
+          type: 'afterClose'
+          tag: 'html'
+          attrs: attrs
+          content: insideHtml
+        }
+      ]
+
+      test.done()

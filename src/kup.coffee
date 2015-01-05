@@ -38,9 +38,9 @@ Kup.prototype =
   tag: (tag, attrs, content) ->
     if 'object' isnt typeof attrs
       content = attrs
-      attrs = null
+      attrs = undefined
 
-    @beforeOpen?(tag, attrs)
+    @beforeOpen?(tag, attrs, content)
     @htmlOut += @open(tag, attrs) + '>'
     @afterOpen?(tag, attrs, content)
     type = typeof content
@@ -51,7 +51,7 @@ Kup.prototype =
       @htmlOut += @encodeContent stringContent
     @beforeClose?(tag, attrs, content)
     @htmlOut += "</#{tag}>"
-    @afterClose?(tag, attrs)
+    @afterClose?(tag, attrs, content)
 
   open: (tag, attrs) ->
     out = "<#{tag}"
@@ -66,12 +66,12 @@ Kup.prototype =
   empty: (tag, attrs, content) ->
     if 'object' isnt typeof attrs
       content = attrs
-      attrs = null
+      attrs = undefined
     if content?
       throw new Error "void tag `#{tag}` accepts no content but content `#{content}` was given"
-    @beforeEmpty?(tag, attrs)
+    @beforeVoid?(tag, attrs)
     @htmlOut += @open(tag, attrs) + ' />'
-    @afterEmpty?(tag, attrs)
+    @afterVoid?(tag, attrs)
 
   unsafe: (string) ->
     @htmlOut += string
