@@ -21,7 +21,8 @@ Kup.prototype =
     # regex matches any of the chars that are keys in `contentEncodings` above
     content.toString().replace /[&<>"'\/]/g, (char) -> contentEncodings[char]
 
-  htmlEncodeDoubleQuotes: (value) ->
+  # html escape double quotes
+  encodeAttribute: (value) ->
     value.toString().replace /"/g, '&quot;'
 
   # http://stackoverflow.com/a/8955580
@@ -32,12 +33,9 @@ Kup.prototype =
 # pure functions that return strings
 
   attributeToString: (key, value) ->
-    valueAsString =
-      if key is 'style' and 'object' is typeof value
-        @styleObjectToString(value)
-      else
-        value
-    "#{key}=\"#{@htmlEncodeDoubleQuotes(valueAsString)}\""
+    if key is 'style' and 'object' is typeof value
+      value = @styleObjectToString(value)
+    "#{key}=\"#{@encodeAttribute(value)}\""
 
   styleObjectToString: (styles) ->
     parts = []
