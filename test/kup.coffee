@@ -1,6 +1,6 @@
 Kup = require '../src/kup'
 
-attrs =
+ATTRS =
   id: 'container'
   class: 'active danger'
 
@@ -46,13 +46,13 @@ module.exports =
 
       'with attributes': (test) ->
         k = new Kup
-        k.a attrs
+        k.a ATTRS
         test.equals k.htmlOut, '<a id="container" class="active danger"></a>'
         test.done()
 
       'with attributes': (test) ->
         k = new Kup
-        k.a attrs
+        k.a ATTRS
         test.equals k.htmlOut, '<a id="container" class="active danger"></a>'
         test.done()
 
@@ -66,7 +66,7 @@ module.exports =
 
       'with attributes': (test) ->
         k = new Kup
-        k.a attrs, 'Lorem Ipsum'
+        k.a ATTRS, 'Lorem Ipsum'
         test.equals k.htmlOut, '<a id="container" class="active danger">Lorem Ipsum</a>'
         test.done()
 
@@ -83,7 +83,7 @@ module.exports =
 
       'with attributes': (test) ->
         k = new Kup
-        k.p attrs, ->
+        k.p ATTRS, ->
           k.a 'First Indent'
           k.p ->
             k.a 'Second Indent'
@@ -107,7 +107,7 @@ module.exports =
 
     'with attributes': (test) ->
       k = new Kup
-      k.img attrs
+      k.img ATTRS
       test.equals k.htmlOut, '<img id="container" class="active danger" />'
       test.done()
 
@@ -139,8 +139,8 @@ module.exports =
     k.newline = ->
       @htmlOut += '\n'
     # add newlines after opening tag and after closing tag
-    k.tag = (tag, attrs, content) ->
-      @open tag, attrs
+    k.tag = (tag, ATTRS, content) ->
+      @open tag, ATTRS
       if 'function' is typeof content
         @newline()
       @content content
