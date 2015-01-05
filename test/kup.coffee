@@ -153,16 +153,6 @@ module.exports =
           tag: tag
           attrs: attrs
           content: content
-      k.beforeVoid = (tag, attrs) ->
-        calls.push
-          type: 'beforeVoid'
-          tag: tag
-          attrs: attrs
-      k.afterVoid = (tag, attrs) ->
-        calls.push
-          type: 'afterVoid'
-          tag: tag
-          attrs: attrs
       k.beforeClose = (tag, attrs, content) ->
         calls.push
           type: 'beforeClose'
@@ -175,6 +165,16 @@ module.exports =
           tag: tag
           attrs: attrs
           content: content
+      k.beforeVoid = (tag, attrs) ->
+        calls.push
+          type: 'beforeVoid'
+          tag: tag
+          attrs: attrs
+      k.afterVoid = (tag, attrs) ->
+        calls.push
+          type: 'afterVoid'
+          tag: tag
+          attrs: attrs
 
       insideHtml = ->
         k.img attrs
