@@ -111,6 +111,14 @@ module.exports =
       test.equals k.htmlOut, '<img id="container" class="active danger" />'
       test.done()
 
+  'doctype': (test) ->
+    k = new Kup
+    k.doctype()
+    k.a()
+    test.equals k.htmlOut, '<!DOCTYPE html><a></a>'
+    test.done()
+
+
   'encode':
 
     'attribute': (test) ->

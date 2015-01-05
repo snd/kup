@@ -34,7 +34,6 @@ Kup.prototype =
 
   doctype: ->
     @htmlOut += '<!DOCTYPE html>'
-    @newline()
 
   tag: (tag, attrs, content) ->
     if 'object' isnt typeof attrs
