@@ -1,12 +1,3 @@
-################################################################################
-# exports and constructor
-
-module.exports = Kup = ->
-  @htmlOut = ''
-
-################################################################################
-# encode
-
 contentEncodings =
   '&': '&amp;'
   '<': '&lt;'
@@ -15,33 +6,63 @@ contentEncodings =
   '\'': '&#x27;'
   '/': '&#x2F;'
 
-# matches any of the chars that are keys in `contentEncodings` above
-contentRegex = /[&<>"'\/]/g
-encodeContentChar = (char) -> contentEncodings[char]
-encodeContent = (content) ->
-  content.toString().replace contentRegex, encodeContentChar
-
-encodeAttribute = (value) ->
-  value.toString().replace /"/g, '&quot;'
-
 ################################################################################
-# API
+# exports is a constructor with a prototype
+
+module.exports = Kup = ->
+  @htmlOut = ''
 
 Kup.prototype =
 
-  encodeContent: encodeContent
-  encodeAttribute: encodeAttribute
+################################################################################
+# string helpers
+
+  encodeContent: (content) ->
+    # regex matches any of the chars that are keys in `contentEncodings` above
+    content.toString().replace /[&<>"'\/]/g, (char) -> contentEncodings[char]
+
+  htmlEncodeDoubleQuotes: (value) ->
+    value.toString().replace /"/g, '&quot;'
+
+  # http://stackoverflow.com/a/8955580
+  camelcaseToDashcase: (string) ->
+    string.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()
+
+################################################################################
+# pure functions that return strings
+
+  attributeToString: (key, value) ->
+    valueAsString =
+      if key is 'style' and 'object' is typeof value
+        @styleObjectToString(value)
+      else
+        value
+    "#{key}=\"#{@htmlEncodeDoubleQuotes(valueAsString)}\""
+
+  styleObjectToString: (styles) ->
+    parts = []
+    for key, value of styles
+      parts.push "#{@camelcaseToDashcase key}: #{value};"
+    return parts.join(' ')
+
+  openingTagUntilExceptClosingBracketToString: (tag, attrs) ->
+    parts = ["<#{tag}"]
+    for key, value of attrs
+      # XSS prevention for attributes:
+      # properly quoted attributes can only be escaped with the corresponding quote
+      if not value?
+        throw new Error "value of attribute `#{key}` in tag `#{tag}` is undefined or null"
+      parts.push @attributeToString key, value
+    return parts.join(' ')
+
+################################################################################
+# side effects on @htmlOut
 
   doctype: ->
     @htmlOut += '<!DOCTYPE html>'
 
-  tag: (tag, attrs, content) ->
-    @open tag, attrs
-    @content content
-    @close tag
-
   open: (tag, attrs) ->
-    @htmlOut += @prefix(tag, attrs) + '>'
+    @htmlOut += @openingTagUntilExceptClosingBracketToString(tag, attrs) + '>'
 
   content: (content) ->
     type = typeof content
@@ -54,18 +75,13 @@ Kup.prototype =
   close: (tag) ->
     @htmlOut += "</#{tag}>"
 
-  prefix: (tag, attrs) ->
-    out = "<#{tag}"
-    for k, v of attrs
-      # XSS prevention for attributes:
-      # properly quoted attributes can only be escaped with the corresponding quote
-      if not v?
-        throw new Error "value of attribute `#{k}` in tag `#{tag}` is undefined or null"
-      out += " #{k}=\"#{@encodeAttribute(v)}\""
-    return out
+  tag: (tag, attrs, content) ->
+    @open tag, attrs
+    @content content
+    @close tag
 
   empty: (tag, attrs) ->
-    @htmlOut += @prefix(tag, attrs) + ' />'
+    @htmlOut += @openingTagUntilExceptClosingBracketToString(tag, attrs) + ' />'
 
   unsafe: (string) ->
     @htmlOut += string
@@ -74,7 +90,7 @@ Kup.prototype =
     @htmlOut += @encodeContent string
 
 ################################################################################
-# tags
+# all the regular tags with content
 
 regular = 'a abbr address article aside audio b bdi bdo blockquote body button
   canvas caption cite code colgroup datalist dd del details dfn div dl dt em
@@ -91,6 +107,9 @@ for tag in regular
         content = attrs
         attrs = undefined
       @tag tag, attrs, content
+
+################################################################################
+# all the void tags without content
 
 empty = 'area base br col command embed hr img input keygen link meta
   param source track wbr frame'.split(/[\n ]+/)
