@@ -117,7 +117,7 @@ produces the following HTML:
 </div>
 ```
 
-if you want a similar special treatment for attributes other than `style` just
+if you want a similar special treatment for attributes other than `style`
 overwrite `Kup.prototype.attributeToString = (key, value) -> ...`.
 it's 3 lines of code that are easily customized.
 
