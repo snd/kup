@@ -1,11 +1,12 @@
 {
   "name": "kup",
   "version": "1.4.0",
-  "description": "kup is an html builder for nodejs",
+  "description": "forget underpowered template languages - build HTML with the full power of coffeescript",
   "keywords": [
     "template",
     "html",
     "builder",
+    "generate",
     "coffeescript"
   ],
   "homepage": "http://github.com/snd/kup",
