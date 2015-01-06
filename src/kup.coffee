@@ -1,123 +1,135 @@
-contentEncodings =
-  '&': '&amp;'
-  '<': '&lt;'
-  '>': '&gt;'
-  '"': '&quot;'
-  '\'': '&#x27;'
-  '/': '&#x2F;'
+# do -> = module pattern in coffeescript
+do ->
+  Kup = ->
+    @htmlOut = ''
 
-################################################################################
-# exports is a constructor with a prototype
+  ################################################################################
+  # node.js or browser?
 
-module.exports = Kup = ->
-  @htmlOut = ''
+  if window?
+    window.Kup = Kup
+  else if module?.exports?
+    module.exports = Kup
+  else
+    throw new Error 'either the `window` global or the `module.exports` global must be present'
 
-Kup.prototype =
+  contentEncodings =
+    '&': '&amp;'
+    '<': '&lt;'
+    '>': '&gt;'
+    '"': '&quot;'
+    '\'': '&#x27;'
+    '/': '&#x2F;'
 
-################################################################################
-# string helpers
+  ################################################################################
+  # API
 
-  encodeContent: (content) ->
-    # regex matches any of the chars that are keys in `contentEncodings` above
-    content.toString().replace /[&<>"'\/]/g, (char) -> contentEncodings[char]
+  Kup.prototype =
 
-  # html escape double quotes
-  encodeAttribute: (value) ->
-    value.toString().replace /"/g, '&quot;'
+    ################################################################################
+    # string helpers
 
-  # http://stackoverflow.com/a/8955580
-  camelcaseToDashcase: (string) ->
-    string.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()
+    encodeContent: (content) ->
+      # regex matches any of the chars that are keys in `contentEncodings` above
+      content.toString().replace /[&<>"'\/]/g, (char) -> contentEncodings[char]
 
-################################################################################
-# pure functions that return strings
+    # html escape double quotes
+    encodeAttribute: (value) ->
+      value.toString().replace /"/g, '&quot;'
 
-  attributeToString: (key, value) ->
-    if key is 'style' and 'object' is typeof value
-      value = @styleObjectToString(value)
-    "#{key}=\"#{@encodeAttribute(value)}\""
+    # http://stackoverflow.com/a/8955580
+    camelcaseToDashcase: (string) ->
+      string.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()
 
-  styleObjectToString: (styles) ->
-    parts = []
-    for key, value of styles
-      parts.push "#{@camelcaseToDashcase key}: #{value};"
-    return parts.join(' ')
+    ################################################################################
+    # pure functions that return strings
 
-  openingTagUntilExceptClosingBracketToString: (tag, attrs) ->
-    parts = ["<#{tag}"]
-    for key, value of attrs
-      # XSS prevention for attributes:
-      # properly quoted attributes can only be escaped with the corresponding quote
-      if not value?
-        throw new Error "value of attribute `#{key}` in tag `#{tag}` is undefined or null"
-      parts.push @attributeToString key, value
-    return parts.join(' ')
+    attributeToString: (key, value) ->
+      if key is 'style' and 'object' is typeof value
+        value = @styleObjectToString(value)
+      "#{key}=\"#{@encodeAttribute(value)}\""
 
-################################################################################
-# side effects on @htmlOut
+    styleObjectToString: (styles) ->
+      parts = []
+      for key, value of styles
+        parts.push "#{@camelcaseToDashcase key}: #{value};"
+      return parts.join(' ')
 
-  doctype: ->
-    @htmlOut += '<!DOCTYPE html>'
+    openingTagUntilExceptClosingBracketToString: (tag, attrs) ->
+      parts = ["<#{tag}"]
+      for key, value of attrs
+        # XSS prevention for attributes:
+        # properly quoted attributes can only be escaped with the corresponding quote
+        if not value?
+          throw new Error "value of attribute `#{key}` in tag `#{tag}` is undefined or null"
+        parts.push @attributeToString key, value
+      return parts.join(' ')
 
-  open: (tag, attrs) ->
-    @htmlOut += @openingTagUntilExceptClosingBracketToString(tag, attrs) + '>'
+    ################################################################################
+    # side effects on @htmlOut
 
-  content: (content) ->
-    type = typeof content
-    if type is 'function'
-      content()
-    else if content?
-      stringContent = if type isnt 'string' then content.toString() else content
-      @htmlOut += @encodeContent stringContent
+    doctype: ->
+      @htmlOut += '<!DOCTYPE html>'
 
-  close: (tag) ->
-    @htmlOut += "</#{tag}>"
+    open: (tag, attrs) ->
+      @htmlOut += @openingTagUntilExceptClosingBracketToString(tag, attrs) + '>'
 
-  tag: (tag, attrs, content) ->
-    @open tag, attrs
-    @content content
-    @close tag
+    content: (content) ->
+      type = typeof content
+      if type is 'function'
+        content()
+      else if content?
+        stringContent = if type isnt 'string' then content.toString() else content
+        @htmlOut += @encodeContent stringContent
 
-  empty: (tag, attrs) ->
-    @htmlOut += @openingTagUntilExceptClosingBracketToString(tag, attrs) + ' />'
+    close: (tag) ->
+      @htmlOut += "</#{tag}>"
 
-  unsafe: (string) ->
-    @htmlOut += string
+    tag: (tag, attrs, content) ->
+      @open tag, attrs
+      @content content
+      @close tag
 
-  safe: (string) ->
-    @htmlOut += @encodeContent string
+    empty: (tag, attrs) ->
+      @htmlOut += @openingTagUntilExceptClosingBracketToString(tag, attrs) + ' />'
 
-################################################################################
-# all the regular tags with content
+    unsafe: (string) ->
+      @htmlOut += string
 
-regular = 'a abbr address article aside audio b bdi bdo blockquote body button
-  canvas caption cite code colgroup datalist dd del details dfn div dl dt em
-  fieldset figcaption figure footer form frameset h1 h2 h3 h4 h5 h6 head header hgroup
-  html i iframe ins kbd label legend li map mark menu meter nav noscript object
-  ol optgroup option output p pre progress q rp rt ruby s samp script section
-  select small span strong sub summary sup table tbody td textarea tfoot
-  th thead time title tr u ul video style'.split(/[\n ]+/)
+    safe: (string) ->
+      @htmlOut += @encodeContent string
 
-for tag in regular
-  do (tag) ->
-    Kup.prototype[tag] = (attrs, content) ->
-      if 'object' isnt typeof attrs
-        content = attrs
-        attrs = undefined
-      @tag tag, attrs, content
+  ################################################################################
+  # all the regular tags with content
 
-################################################################################
-# all the void tags without content
+  regular = 'a abbr address article aside audio b bdi bdo blockquote body button
+    canvas caption cite code colgroup datalist dd del details dfn div dl dt em
+    fieldset figcaption figure footer form frameset h1 h2 h3 h4 h5 h6 head header hgroup
+    html i iframe ins kbd label legend li map mark menu meter nav noscript object
+    ol optgroup option output p pre progress q rp rt ruby s samp script section
+    select small span strong sub summary sup table tbody td textarea tfoot
+    th thead time title tr u ul video style'.split(/[\n ]+/)
 
-empty = 'area base br col command embed hr img input keygen link meta
-  param source track wbr frame'.split(/[\n ]+/)
+  for tag in regular
+    do (tag) ->
+      Kup.prototype[tag] = (attrs, content) ->
+        if 'object' isnt typeof attrs
+          content = attrs
+          attrs = undefined
+        @tag tag, attrs, content
 
-for tag in empty
-  do (tag) ->
-    Kup.prototype[tag] = (attrs, content) ->
-      if 'object' isnt typeof attrs
-        content = attrs
-        attrs = undefined
-      if content?
-        throw new Error "void tag `#{tag}` accepts no content but content `#{content}` was given"
-      @empty tag, attrs, content
+  ################################################################################
+  # all the void tags without content
+
+  empty = 'area base br col command embed hr img input keygen link meta
+    param source track wbr frame'.split(/[\n ]+/)
+
+  for tag in empty
+    do (tag) ->
+      Kup.prototype[tag] = (attrs, content) ->
+        if 'object' isnt typeof attrs
+          content = attrs
+          attrs = undefined
+        if content?
+          throw new Error "void tag `#{tag}` accepts no content but content `#{content}` was given"
+        @empty tag, attrs, content
