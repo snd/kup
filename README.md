@@ -162,17 +162,13 @@ configure kup to insert newlines after each opening tag (that has inner HTML)
 and each closing tag:
 
 ```coffeescript
-k = new Kup
-
-k.newline = ->
-  @htmlOut += '\n'
-k.tag = (tag, attrs, content) ->
+Kup.prototype.tag = (tag, attrs, content) ->
   @open tag, attrs
   if 'function' is typeof content
-    @newline()
+    @htmlOut += '\n'
   @content content
   @close tag
-  @newline()
+  @htmlOut += '\n'
 ```
 
 ## contribution
