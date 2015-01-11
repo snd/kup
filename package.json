@@ -38,7 +38,7 @@
     "compile": "node_modules/coffee-script/bin/coffee --bare --compile --output lib/ src/",
     "prepublish": "npm run compile",
     "pretest": "npm run compile",
-    "test": "node_modules/nodeunit/bin/nodeunit test/*.coffee || :"
+    "test": "node_modules/nodeunit/bin/nodeunit test/*.coffee"
   },
   "main": "lib/kup"
 }
