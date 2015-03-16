@@ -140,11 +140,14 @@ module.exports =
       @htmlOut += '\n'
     # add newlines after opening tag and after closing tag
     k.tag = (tag, attrs, content) ->
-      @open tag, attrs
+      if 'object' isnt typeof attrs
+        content = attrs
+        attrs = undefined
+      @_open tag, attrs
       if 'function' is typeof content
         @newline()
-      @content content
-      @close tag
+      @_content content
+      @_close tag
       @newline()
 
     k.html ->
