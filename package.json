@@ -1,6 +1,6 @@
 {
   "name": "kup",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "forget underpowered template languages - build HTML with the full power of coffeescript",
   "keywords": [
     "template",
