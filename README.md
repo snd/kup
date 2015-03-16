@@ -163,11 +163,14 @@ and each closing tag:
 
 ```coffeescript
 Kup.prototype.tag = (tag, attrs, content) ->
-  @open tag, attrs
+  if 'object' isnt typeof attrs
+    content = attrs
+    attrs = undefined
+  @_open tag, attrs
   if 'function' is typeof content
     @htmlOut += '\n'
-  @content content
-  @close tag
+  @_content content
+  @_close tag
   @htmlOut += '\n'
 ```
 
