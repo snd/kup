@@ -195,3 +195,33 @@ module.exports =
         style: {}
       test.equal k.htmlOut, "<div style=\"\"></div>"
       test.done()
+
+  'custom tag':
+
+    'without content':
+
+      'without attributes': (test) ->
+        k = new Kup
+        k.tag 'url'
+        test.equals k.htmlOut, '<url></url>'
+        test.done()
+
+      'with attributes': (test) ->
+        k = new Kup
+        k.tag 'url', ATTRS
+        test.equals k.htmlOut, '<url id="container" class="active danger"></url>'
+        test.done()
+
+    'with content':
+
+      'without attributes': (test) ->
+        k = new Kup
+        k.tag 'url', 'Lorem Ipsum'
+        test.equals k.htmlOut, '<url>Lorem Ipsum</url>'
+        test.done()
+
+      'with attributes': (test) ->
+        k = new Kup
+        k.tag 'url', ATTRS, 'Lorem Ipsum'
+        test.equals k.htmlOut, '<url id="container" class="active danger">Lorem Ipsum</url>'
+        test.done()
