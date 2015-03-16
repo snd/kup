@@ -31,8 +31,8 @@
     "node": ">=0.10.0"
   },
   "devDependencies": {
-    "coffee-script": "1.8.0",
-    "nodeunit": "0.9.0"
+    "coffee-script": "1.9.1",
+    "nodeunit": "0.9.1"
   },
   "scripts": {
     "compile": "node_modules/coffee-script/bin/coffee --bare --compile --output lib/ src/",
